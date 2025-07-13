@@ -2,21 +2,36 @@
 //! you are building an executable. If you are making a library, the convention
 //! is to delete this file and start with root.zig instead.
 const std = @import("std");
+const math = std.math;
 
 pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    const vec = [_]f64{ 1.0, 2.0, 3.0, 1.0, 1.0 };
+    const p: u16 = 2;
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
+    const result: f64 = pNorm(&vec, p);
+
     const stdout_file = std.io.getStdOut().writer();
     var bw = std.io.bufferedWriter(stdout_file);
     const stdout = bw.writer();
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+    try stdout.print("For the vector with the elements \n", .{});
+    for (vec) |x| {
+        try stdout.print("{}\n", .{x});
+    }
+    try stdout.print("and the p={}, the p-norm is: {}\n", .{ p, result });
 
-    try bw.flush(); // Don't forget to flush!
+    try bw.flush();
+}
+
+// Helper function: Compute p-norm
+fn pNorm(vec: []const f64, p: u16) f64 {
+    var sum: f64 = 0.0;
+    const power: f64 = @floatFromInt(p);
+    for (vec) |x| {
+        sum += math.pow(f64, x, power);
+    }
+    const exponent: f64 = 1.0 / power;
+    return math.pow(f64, sum, exponent);
 }
 
 test "simple test" {

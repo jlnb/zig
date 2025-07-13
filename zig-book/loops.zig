@@ -43,6 +43,6 @@ test "while with break" {
 test "for loops" {
     const string = [_]u8{ 'L', 'i', 's', 'a' };
     for (string, 0..) |character, index| {
-        std.debug.print("Index: {}; Character: {}\n", .{ index, character });
+        std.debug.print("Index: {}; Character: {c}\n", .{ index, character });
     }
 }
